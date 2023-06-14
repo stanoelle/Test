@@ -2,9 +2,9 @@ import asyncio
 
 from pyrogram import Client
 
-api_id = int("input api id")  # Replace with your API ID (integer)
+api_id = int(input("input api id"))  # Replace with your API ID (integer)
 
-api_hash = str("api hash")  # Replace with your API Hash (string)
+api_hash = str(input("api hash"))  # Replace with your API Hash (string)
 
 async def main():
 
