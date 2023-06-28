@@ -634,31 +634,30 @@ def webhook_handler():
 
     return 'OK'
 
-if __name__ == '__main__':
-    application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-    reset_handler = CommandHandler("reset", reset)
-    purge_handler = CommandHandler("purge", purge)
-    select_handler = CommandHandler("select", select)
-    message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), process_message)
-    button_handler = CallbackQueryHandler(button_callback)
-    help_handler = CommandHandler("help", help_command)
-    set_cookie_handler = CommandHandler("setcookie", set_cookie)
-    restart_handler = CommandHandler("restart", restart_bot)
+reset_handler = CommandHandler("reset", reset)
+purge_handler = CommandHandler("purge", purge)
+select_handler = CommandHandler("select", select)
+message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), process_message)
+button_handler = CallbackQueryHandler(button_callback)
+help_handler = CommandHandler("help", help_command)
+set_cookie_handler = CommandHandler("setcookie", set_cookie)
+restart_handler = CommandHandler("restart", restart_bot)
     #summarize_handler = CommandHandler("summarize", summarize)
-    imagine_handler = CommandHandler("imagine", imagine)
+imagine_handler = CommandHandler("imagine", imagine)
 
-    application.add_handler(reset_handler)
-    application.add_handler(purge_handler)
-    application.add_handler(select_handler)
-    application.add_handler(message_handler)
-    application.add_handler(button_handler)
-    application.add_handler(help_handler)
-    application.add_handler(set_cookie_handler)
-    application.add_handler(restart_handler)
+application.add_handler(reset_handler)
+application.add_handler(purge_handler)
+application.add_handler(select_handler)
+application.add_handler(message_handler)
+application.add_handler(button_handler)
+application.add_handler(help_handler)
+application.add_handler(set_cookie_handler)
+application.add_handler(restart_handler)
     #application.add_handler(summarize_handler)
-    application.add_handler(imagine_handler)
-
+application.add_handler(imagine_handler)
+if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
 
  
