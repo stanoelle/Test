@@ -9,7 +9,7 @@ from BingImageCreator import ImageGen
 from dotenv import load_dotenv
 import telebot
 from telebot.types import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
-from telebot import filters, types
+from telebot import types
 
 # Load environment variables from .env file
 load_dotenv()
@@ -101,7 +101,7 @@ def reset(message):
 
         bot.send_message(
             chat_id=message.chat.id,
-            text="Context cleared. Chat log file deleted.",
+            text="Model context reset. Chat log file deleted.",
         )
     except Exception as e:
         handle_error(message, e)
