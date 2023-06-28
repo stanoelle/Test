@@ -132,5 +132,6 @@ async def handle_error(update, context, exception):
         text=error_message,
     )
 
+
 if __name__ == "__main__":
     bot.polling()
