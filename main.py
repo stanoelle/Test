@@ -85,6 +85,52 @@ def purge(message):
         )
     except Exception as e:
         handle_error(message, e)
+@bot.message_handler(commands=['reset'])
+def reset(message):
+    try:
+        # Clear the context
+        client.send_chat_break(selected_model)
+
+        # Remove the chat log file
+        if os.path.isfile(chat_log_file):
+            os.remove(chat_log_file)
+
+        bot.send_message(
+            chat_id=message.chat.id,
+            text="Context cleared. Chat log file deleted.",
+        )
+    except Exception as e:
+        handle_error(message, e)
+@bot.message_handler(commands=['select'])
+def select(message):
+    try:
+        # Get the list of available bots
+        bot_names = client.bot_names.values()
+
+        # Create a list of InlineKeyboardButtons for each bot
+        buttons = []
+        for bot_name in bot_names:
+            button = InlineKeyboardButton(text=bot_name, callback_data=bot_name)
+            buttons.append([button])
+
+        # Create an InlineKeyboardMarkup with the list of buttons
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        # Send a message to the user with the list of buttons
+        bot.send_message(
+            chat_id=message.chat.id,
+            text="Please select a bot/model:",
+            reply_markup=reply_markup,
+        )
+    except Exception as e:
+        handle_error(message, e)
+async def handle_error(update, context, exception):
+    logging.error("An error occurred: %s", str(exception))
+    error_message = "An error occurred while processing your request."
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=error_message,
+    )
 
 if __name__ == "__main__":
     bot.polling()
