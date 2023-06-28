@@ -69,3 +69,19 @@ def start(message):
         chat_id=chat_id,
         text="I'm a Poe.com Telegram Bot. Use /help for a list of commands.",
     )
+@bot.message_handler(commands=['purge'])
+def purge(message):
+    try:
+        # Purge the entire conversation
+        client.purge_conversation(selected_model)
+
+        # Remove the chat log file
+        if os.path.isfile(chat_log_file):
+            os.remove(chat_log_file)
+
+        bot.send_message(
+            chat_id=message.chat.id,
+            text="Conversation purged. Chat log file deleted.",
+        )
+    except Exception as e:
+        handle_error(message, e)
