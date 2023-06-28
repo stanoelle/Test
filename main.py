@@ -124,6 +124,27 @@ def select(message):
         )
     except Exception as e:
         print('ww')
+async def button_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+
+    try:
+        # Get the selected bot/model codename
+        selected_bot = next(
+            (k for k, v in client.bot_names.items() if v == query.data), None
+        )
+
+        if selected_bot is None:
+            await query.answer(text="Invalid selection.")
+        else:
+            # Set the selected bot/model for the entire context
+            global selected_model
+            selected_model = selected_bot
+
+            # Send a confirmation message to the user
+            await query.answer(text=f"{query.data} model selected.")
+    except Exception as e:
+        print('ww')
+
 
 
 
