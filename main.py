@@ -618,7 +618,7 @@ def ask_command_handler(message):
 
    generate_answer(message) 
 
-webhook_url = 'https://bard-tgg.onrender.com/bot-webhook'  # Replace with your webhook URL
+webhook_url = ''  # Replace with your webhook URL
 
 bot.remove_webhook()
 
