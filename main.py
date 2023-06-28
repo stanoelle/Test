@@ -503,7 +503,6 @@ def send_welcome(message):
         keyboard.add(button_how_to_use)
 
         photo = 'Google-Introduces-BARD-AI-Chatbot (1).jpg', 'rb')
-
         bot.send_photo(message.chat.id, photo, caption='''👋 Welcome to our AI-powered bot!
 
 This bot is based on Chatgpt and BardAi which is designed to provide accurate and real-time answers to a wide range of topics. 
