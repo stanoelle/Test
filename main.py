@@ -502,7 +502,7 @@ def send_welcome(message):
 
         keyboard.add(button_how_to_use)
 
-        photo = open('Google-Introduces-BARD-AI-Chatbot.jpg', 'rb')
+        photo = open('Google-Introduces-BARD-AI-Chatbot (1).jpg', 'rb')
 
         bot.send_photo(message.chat.id, photo, caption='''👋 Welcome to our AI-powered bot!
 
@@ -538,25 +538,6 @@ def handle_back(call):
 
     send_welcome(call.message) 
     
-@bot.message_handler(commands=["broadcast"])
-
-def broadcast_command(message):
-
-    if message.from_user.id == ADMIN_USER_ID:
-
-        message_text = message.text.replace("/broadcast", "").strip()
-
-        for user in users_collection.find():
-
-            try:
-
-                bot.send_message(user["user_id"], message_text)
-
-            except Exception as e:
-
-                print(f"Failed to send message to {user['user_id']}: {e}") 
-                
-
 @bot.message_handler(func=lambda message: True)
 
 def handle_all_messages(message):
