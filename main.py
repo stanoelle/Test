@@ -2,7 +2,6 @@ import os
 import requests
 import openai
 from PIL import Image
-from pymongo import MongoClient
 import io
 from flask import Flask, request
 import telebot
@@ -37,21 +36,14 @@ your_user_id = 6113550151
 # Define the path to the JSON file
 openai.api_key = 'pk-wfPVEOYDbeIaBkFTOUEjVLqwQsZBQOhoqCceReGRivcqYPbl'
 openai.api_base = 'https://api.pawan.krd/v1'
-MONGODB_URI = "mongodb+srv://apurba:apurba@chataitg.xay89st.mongodb.net/telegramBotUsers?retryWrites=true&w=majority"
-ADMIN_USER_ID = 6113550151
-client = MongoClient(MONGODB_URI)
-db = client.get_default_database()
-users_collection = db["users"]
-
-
-bot_token = "6292300109:AAHsRHtBZrTiuOMpZ-YEW_JF2psyMGWzSIA"  # Replace with your Telegram bot token
+bot_token = "6179975944:AAEgrJwmzF0urBQOMYOVhGyosAFGoGYTc14"  # Replace with your Telegram bot token
 
 token = 'XQhF5_DT2aLBsn9ezvV6EtEo8tzz0vqZLWK6CRpvcJUGXc3rlPh2HVYFerCUqf8BlMoHMw.'  # Retrieve Bard API token from environment variable
 
 bard = Bard(token=token)
 
 bot = telebot.TeleBot(bot_token)
-TELEGRAM_TOKEN = "6292300109:AAHsRHtBZrTiuOMpZ-YEW_JF2psyMGWzSIA"
+TELEGRAM_TOKEN = "6179975944:AAEgrJwmzF0urBQOMYOVhGyosAFGoGYTc14"
 POE_COOKIE = "m87UlQ4NDefo_CAwj-9kCQ%3D%3D"
 ALLOWED_USERS = os.getenv("ALLOWED_USERS")
 ALLOWED_CHATS = os.getenv("ALLOWED_CHATS")
@@ -490,12 +482,6 @@ def gpt_command_handler(message):
 
     bot.send_message(message.chat.id, ai_response)
 
-def add_user_to_db(user_id):
-
-    if not users_collection.find_one({"user_id": user_id}):
-
-        users_collection.insert_one({"user_id": user_id})
-
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
 
@@ -570,16 +556,6 @@ def broadcast_command(message):
 
                 print(f"Failed to send message to {user['user_id']}: {e}") 
                 
-@bot.message_handler(commands=['stats'])
-
-def stats_command(message):
-
-    if message.from_user.id == 6113550151:
-
-        num_users = users_collection.count_documents({})
-
-        bot.reply_to(message, f'Total number of users: {num_users}')
-
 
 @bot.message_handler(func=lambda message: True)
 
