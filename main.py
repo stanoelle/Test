@@ -85,3 +85,6 @@ def purge(message):
         )
     except Exception as e:
         handle_error(message, e)
+
+if __name__ == "__main__":
+    bot.polling()
