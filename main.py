@@ -100,7 +100,7 @@ def reset(message):
             text="Context cleared. Chat log file deleted.",
         )
     except Exception as e:
-        handle_error(message, e)
+        print('ww')
 @bot.message_handler(commands=['select'])
 def select(message):
     try:
@@ -123,14 +123,8 @@ def select(message):
             reply_markup=reply_markup,
         )
     except Exception as e:
-        handle_error(message, e)
-async def handle_error(update, context, exception):
-    logging.error("An error occurred: %s", str(exception))
-    error_message = "An error occurred while processing your request."
-    await context.bot.send_message(
-        chat_id=update.effective_chat.id,
-        text=error_message,
-    )
+        print('ww')
+
 
 
 if __name__ == "__main__":
