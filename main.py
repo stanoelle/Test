@@ -232,6 +232,8 @@ def button_callback(call):
             bot.answer_callback_query(call.id, text=f"{call.data} model selected.")
     except Exception as e:
         print(f"Error processing button callback")
+chat_log_file = "chat_log.txt"
+max_messages = 20
 @bot.message_handler(func=lambda message: True)
 def process_message(message):
     user_id = message.from_user.id
