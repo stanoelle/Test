@@ -359,6 +359,7 @@ if __name__ == "__main__":
     updater.start_webhook(listen="0.0.0.0",
                        port=PORT,
                        url_path="/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4",
-                       updater=updater)
+                       updater=updater,
+                       update_queue=updater._queue)
     updater.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
     updater.idle()
