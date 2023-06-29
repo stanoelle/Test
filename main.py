@@ -15,7 +15,7 @@ load_dotenv()
 
 # Get environment variables
 
-TELEGRAM_TOKEN = '6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4'
+TELEGRAM_TOKEN = '6343720035:AAFv89DupLXlIGFoMfwuBPs0XuPBPVj5KKw'
 
 POE_COOKIE = 'm87UlQ4NDefo_CAwj-9kCQ%3D%3D'
 
