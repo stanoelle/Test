@@ -345,10 +345,6 @@ bot = Bot(token=TOKEN)
 
 bot.set_webhook("https://test-gwr1.onrender.com/" + TOKEN)
 
-bot.start_webhook(listen="0.0.0.0",
-                   port=80,
-                   url_path=f"/{TOKEN}",
-                   update_queue=bot._queue)
 
 if __name__ == "__main__":
     bot.start()
