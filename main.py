@@ -7,7 +7,8 @@ import time
 import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from telegram import Update
 from telegram.ext import (
     filters,
     MessageHandler,
