@@ -337,7 +337,8 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
     )
 
 if __name__ == "__main__":
-    application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+    updater = Updater(token=TELEGRAM_TOKEN, use_context=True)
+
     start_handler = CommandHandler("start", start) 
     reset_handler = CommandHandler("reset", reset)
     purge_handler = CommandHandler("purge", purge)
@@ -348,17 +349,17 @@ if __name__ == "__main__":
     
     #summarize_handler = CommandHandler("summarize", summarize)
 
-    application.add_handler(start_handler)
-    application.add_handler(reset_handler)
-    application.add_handler(purge_handler)
-    application.add_handler(select_handler)
-    application.add_handler(message_handler)
-    application.add_handler(button_handler)
-    application.add_handler(set_cookie_handler)
-    #application.add_handler(summarize_handler)
+    updater.dispatcher.add_handler(start_handler)
+    updater.dispatcher.add_handler(reset_handler)
+    updater.dispatcher.add_handler(purge_handler)
+    updater.dispatcher.add_handler(select_handler)
+    updater.dispatcher.add_handler(message_handler)
+    updater.dispatcher.add_handler(button_handler)
+    updater.dispatcher.add_handler(set_cookie_handler)
+    #updater.dispatcher.add_handler(summarize_handler)
 
     updater.start_webhook(listen="0.0.0.0",
-                       port=PORT,
-                       url_path="6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    updater.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+                           port=PORT,
+                           url_path="6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    updater.bot.setWebhook(url="https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
     updater.idle()
