@@ -213,7 +213,6 @@ def select(message):
 
         handle_error(message, e)
 
-
 @bot.callback_query_handler(func=lambda call: True)
 def button_callback(call):
     try:
@@ -223,16 +222,16 @@ def button_callback(call):
         )
 
         if selected_bot is None:
-            await call.answer(text="Invalid selection.")
+            bot.answer_callback_query(call.id, text="Invalid selection.")
         else:
             # Set the selected bot/model for the entire context
             global selected_model
             selected_model = selected_bot
 
             # Send a confirmation message to the user
-            await call.answer(text=f"{call.data} model selected.")
+            bot.answer_callback_query(call.id, text=f"{call.data} model selected.")
     except Exception as e:
-        await handle_error(update, context, e)
+        print(f"Error processing button callback")
 @bot.message_handler(func=lambda message: True)
 def process_message(message):
     user_id = message.from_user.id
