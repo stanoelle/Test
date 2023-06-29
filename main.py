@@ -7,10 +7,9 @@ import time
 import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
-from telegram import Update, Bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from telegram import Bot, Updater
 from telegram.ext import (
-    Updater,
     Filters,
     MessageHandler,
     CommandHandler,
@@ -30,7 +29,7 @@ ALLOWED_CHATS = os.getenv("ALLOWED_CHATS")
 
 # Retrieve the Bing auth_cookie from the environment variables
 auth_cookie = os.getenv("BING_AUTH_COOKIE")
-PORT = int(os.environ.get('PORT', '5000'))
+
 # Check if environment variables are set
 if not TELEGRAM_TOKEN:
     raise ValueError("Telegram bot token not set")
@@ -196,6 +195,151 @@ async def set_cookie(update: Update, context: CallbackContext):
         text=f"{cookie_type} set successfully."
     )
 
+async def restart_bot(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+
+    if ALLOWED_USERS and str(user_id) not in ALLOWED_USERS.split(","):
+        # Deny access if user is not in the allowed users list
+        await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Sorry, you are not allowed to use this command. If you are the one who set up this bot, add your Telegram UserID to the \"ALLOWED_USERS\" environment variable in your .env file."
+        )
+        return
+
+    # Reset the "POE_COOKIE" of the poe Client to default.
+    client = poe.Client(POE_COOKIE)
+
+    # Reset the auth_cookie variable as well
+    global auth_cookie
+    auth_cookie = os.getenv("BING_AUTH_COOKIE")
+
+    # Clear the selected model
+    global selected_model
+    selected_model = default_model if default_model else "capybara"
+
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Bot restarted and settings set back to default."
+    )
+
+# Not working, just an idea for now. not sure if it's possible to get an x number of previous messages...
+#async def summarize(update: Update, context: CallbackContext):
+#    try:
+#        # Check if a number is provided as an argument
+#        command_parts = update.effective_message.text.split()
+#        if len(command_parts) != 2 or not command_parts[1].isdigit():
+#            await context.bot.send_message(
+#                chat_id=update.effective_chat.id,
+#                text="Please provide the number of messages to summarize. Example: /summarize 5",
+#            )
+#            return
+#
+#        num_messages = int(command_parts[1])
+#
+#        # Check if the number of messages is within a reasonable range
+#        if num_messages <= 0 or num_messages > 50:
+#            await context.bot.send_message(
+#                chat_id=update.effective_chat.id,
+#                text="Please provide a number of messages between 1 and 50 to summarize.",
+#            )
+#            return
+#
+#        # Add a random delay before sending the request (hopefully mitigates possibility of being banned)
+#        delay_seconds = random.uniform(0.5, 2.0)
+#        time.sleep(delay_seconds)
+#
+#        # Get the chat history from the chat
+#        chat_id = update.effective_chat.id
+#        messages = await context.bot.get_chat_history(chat_id, num_messages)
+#
+#        # Format the messages and concatenate them with the nickname and username
+#        formatted_messages = []
+#        for message in messages:
+#            nickname = message.from_user.first_name
+#            username = message.from_user.username
+#            formatted_message = f"User {nickname} handle (@{username}) said: {message.text}\n"
+#            formatted_messages.append(formatted_message)
+#
+#        # Send the formatted message to the selected bot/model and get the response
+#        response = client.send_message(selected_model, "Give a Summary of the following:\n" + "".join(formatted_messages), with_chat_break=False)
+#
+#        # Concatenate all the message chunks and send the full message back to the user
+#        message_chunks = [chunk["text_new"] for chunk in response]
+#        message_text = "".join(message_chunks)
+#
+#        await context.bot.send_message(
+#            chat_id=update.effective_chat.id,
+#            text=message_text,
+#        )
+#    except Exception as e:
+#        await handle_error(update, context, e)
+
+async def imagine(update: Update, context: CallbackContext):
+    try:
+        # Check if a prompt is provided as an argument
+        command_parts = update.effective_message.text.split()
+        if len(command_parts) < 2:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Please provide a prompt. Example: /imagine cat",
+            )
+            return
+
+        prompt = ' '.join(command_parts[1:])
+
+        if not auth_cookie:
+            await context.bot.send_message(
+                chat_id=update.effective_chat.id,
+                text="Authorization cookie is not set. Please configure the BING_AUTH_COOKIE environment variable.",
+            )
+            return
+
+        # Send a message to indicate that the bot is working
+        working_message = await context.bot.send_message(
+            chat_id=update.effective_chat.id,
+            text="Please wait, generating images...",
+        )
+
+        # Create an instance of ImageGen with the auth_cookie
+        image_gen = ImageGen(auth_cookie)
+
+        # Get the image links from Bing
+        image_links = image_gen.get_images(prompt)
+
+        # Create a temporary directory to save the images
+        temp_dir = "temp_images"
+        os.makedirs(temp_dir, exist_ok=True)
+
+        # Save the images to the temporary directory
+        image_gen.save_images(image_links, temp_dir)
+
+        # Prepare the list of InputMediaPhoto objects for sending grouped photos
+        media_photos = []
+        for filename in os.listdir(temp_dir):
+            image_path = os.path.join(temp_dir, filename)
+            with open(image_path, "rb") as image_file:
+                media_photos.append(InputMediaPhoto(media=image_file))
+
+        # Split the photos into multiple groups if necessary
+        max_photos_per_group = 10
+        grouped_photos = [media_photos[i:i + max_photos_per_group] for i in range(0, len(media_photos), max_photos_per_group)]
+
+        # Send the grouped photos back to the user in separate media groups
+        for group in grouped_photos:
+            await context.bot.send_media_group(
+                chat_id=update.effective_chat.id,
+                media=group,
+            )
+
+        # Remove the temporary directory and its contents
+        shutil.rmtree(temp_dir)
+
+        # Delete the working message
+        await working_message.delete()
+
+    except Exception as e:
+        await handle_error(update, context, e)
+
 # Specify the path to the chat log file
 chat_log_file = "chat_log.txt"
 max_messages = 20
@@ -329,6 +473,24 @@ async def process_message(update: Update, context: CallbackContext) -> None:
     except Exception as e:
         await handle_error(update, context, e)
 
+async def help_command(update: Update, context: CallbackContext) -> None:
+    help_text = (
+        "Available commands:\n\n"
+        "/start - Start the bot.\n"
+        "/purge - Purge the entire conversation with the selected bot/model.\n"
+        "/reset - Clear/Reset the context with the selected bot/model.\n"
+        "/select - Select a bot/model to use for the conversation.\n"
+        "/setcookie <cookie_type> <cookie_value> - Set the POE cookie value. Supported cookie types are: POE_COOKIE, BING_AUTH_COOKIE\n"
+        "/restart - Restart the bot and set everything back to the default.\n"
+        "/imagine - Generate an image using AI.\n"
+        "/help - Show this help message."
+    )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=help_text,
+    )
+
+
 async def handle_error(update: Update, context: CallbackContext, exception: Exception):
     logging.error("An error occurred: %s", str(exception))
     error_message = "An error occurred while processing your request."
@@ -336,7 +498,6 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
         chat_id=update.effective_chat.id,
         text=error_message,
     )
-
 
 if __name__ == "__main__":
     bot = Bot(token=TELEGRAM_TOKEN)
