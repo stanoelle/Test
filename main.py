@@ -337,8 +337,17 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
         text=error_message,
     )
 
+import asyncio
+
+from telegram.bot import Bot
+from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
+
+
 if __name__ == "__main__":
-    application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
+    token = "YOUR_TELEGRAM_TOKEN"
+
+    bot = Bot(token=token)
+
     start_handler = CommandHandler("start", start)
     reset_handler = CommandHandler("reset", reset)
     purge_handler = CommandHandler("purge", purge)
@@ -347,19 +356,17 @@ if __name__ == "__main__":
     button_handler = CallbackQueryHandler(button_callback)
     set_cookie_handler = CommandHandler("setcookie", set_cookie)
 
-    application.add_handler(start_handler)
-    application.add_handler(reset_handler)
-    application.add_handler(purge_handler)
-    application.add_handler(select_handler)
-    application.add_handler(message_handler)
-    application.add_handler(button_handler)
-    application.add_handler(set_cookie_handler)
+    bot.add_handler(start_handler)
+    bot.add_handler(reset_handler)
+    bot.add_handler(purge_handler)
+    bot.add_handler(select_handler)
+    bot.add_handler(message_handler)
+    bot.add_handler(button_handler)
+    bot.add_handler(set_cookie_handler)
 
-    updater = Updater(application, update_queue=updater._queue)
-    updater.start_webhook(listen="0.0.0.0",
-                       port=PORT,
-                       url_path="/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4",
-                       updater=updater,
-                       update_queue=updater._queue)
-    updater.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    updater.idle()
+    bot.start_webhook(listen="0.0.0.0",
+                   port=PORT,
+                   url_path="/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4",
+                   update_queue=bot._queue)
+    bot.set_webhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    bot.idle()
