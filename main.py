@@ -22,8 +22,8 @@ from telegram.ext import (
 load_dotenv()
 
 # Get environment variables
-TELEGRAM_TOKEN = os.getenv("BOT_TOKEN")
-POE_COOKIE = os.getenv("POE_COOKIE")
+TELEGRAM_TOKEN = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
+POE_COOKIE = "m87UlQ4NDefo_CAwj-9kCQ%3D%3D"
 ALLOWED_USERS = os.getenv("ALLOWED_USERS")
 ALLOWED_CHATS = os.getenv("ALLOWED_CHATS")
 
@@ -338,14 +338,14 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
 
 if __name__ == "__main__":
     application = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
-
+    start_handler = CommandHandler("start", start) 
     reset_handler = CommandHandler("reset", reset)
     purge_handler = CommandHandler("purge", purge)
     select_handler = CommandHandler("select", select)
     message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), process_message)
     button_handler = CallbackQueryHandler(button_callback)
     set_cookie_handler = CommandHandler("setcookie", set_cookie)
-    restart_handler = CommandHandler("restart", restart_bot)
+    
     #summarize_handler = CommandHandler("summarize", summarize)
 
     application.add_handler(start_handler)
@@ -356,12 +356,11 @@ if __name__ == "__main__":
     application.add_handler(button_handler)
     application.add_handler(help_handler)
     application.add_handler(set_cookie_handler)
-    application.add_handler(restart_handler)
     #application.add_handler(summarize_handler)
     application.add_handler(imagine_handler)
 
-    updater.start_webhook(listen="0.0.0.0",
+    application.start_webhook(listen="0.0.0.0",
                        port=PORT,
-                       url_path="YOUR TOKEN HERE")
-    updater.bot.setWebhook("YOUR WEB SERVER LINK HERE" + "YOUR TOKEN HERE")
-    updater.idle()
+                       url_path="6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    application.bot.setWebhook("YOUR WEB SERVER LINK HERE" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    application.idle()
