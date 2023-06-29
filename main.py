@@ -354,7 +354,6 @@ if __name__ == "__main__":
     application.add_handler(select_handler)
     application.add_handler(message_handler)
     application.add_handler(button_handler)
-    application.add_handler(help_handler)
     application.add_handler(set_cookie_handler)
     #application.add_handler(summarize_handler)
     application.add_handler(imagine_handler)
