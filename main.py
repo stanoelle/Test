@@ -7,11 +7,11 @@ import time
 import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
-from telegram import Bot
+from telegram import Update, Bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from telegram.ext import (
     Updater,
-    filters,
+    Filters,
     MessageHandler,
     ApplicationBuilder,
     CommandHandler,
@@ -339,15 +339,35 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
     )
 
 
-TOKEN = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
-
-bot = Bot(token=TOKEN)
-
-bot.set_webhook("https://test-gwr1.onrender.com/" + TOKEN)
-
-
 if __name__ == "__main__":
-    bot.start()
+    bot = Bot(token=TELEGRAM_TOKEN)
+    updater = Updater(bot=bot)
 
-    while True:
-        bot.process_update()
+    dispatcher = updater.dispatcher
+
+    start_handler = CommandHandler("start", start)
+    reset_handler = CommandHandler("reset", reset)
+    purge_handler = CommandHandler("purge", purge)
+    select_handler = CommandHandler("select", select)
+    message_handler = MessageHandler(Filters.text & (~Filters.command), process_message)
+    button_handler = CallbackQueryHandler(button_callback)
+    help_handler = CommandHandler("help", help_command)
+    set_cookie_handler = CommandHandler("setcookie", set_cookie)
+    restart_handler = CommandHandler("restart", restart_bot)
+    imagine_handler = CommandHandler("imagine", imagine)
+
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(reset_handler)
+    dispatcher.add_handler(purge_handler)
+    dispatcher.add_handler(select_handler)
+    dispatcher.add_handler(message_handler)
+    dispatcher.add_handler(button_handler)
+    dispatcher.add_handler(help_handler)
+    dispatcher.add_handler(set_cookie_handler)
+    dispatcher.add_handler(restart_handler)
+    dispatcher.add_handler(imagine_handler)
+
+    updater.start_webhook(listen="0.0.0.0", port=80, url_path=TELEGRAM_TOKEN)
+    updater.bot.setWebhook("https://test-gwr1.onrender.com/")
+
+    updater.idle()
