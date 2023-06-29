@@ -13,7 +13,6 @@ from telegram.ext import (
     Updater,
     Filters,
     MessageHandler,
-    ApplicationBuilder,
     CommandHandler,
     ContextTypes,
     CallbackContext,
