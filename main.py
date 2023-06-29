@@ -362,5 +362,5 @@ if __name__ == "__main__":
     application.start_webhook(listen="0.0.0.0",
                        port=PORT,
                        url_path="6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    application.bot.setWebhook("YOUR WEB SERVER LINK HERE" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    application.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
     application.idle()
