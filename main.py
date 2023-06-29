@@ -501,6 +501,7 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
     )
 bot = Bot(token=TELEGRAM_TOKEN)
 updater = Updater(bot=bot)
+dispatcher = updater.dispatcher
 if __name__ == "__main__":
     start_handler = CommandHandler("start", start)
     reset_handler = CommandHandler("reset", reset)
