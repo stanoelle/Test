@@ -23,7 +23,7 @@ load_dotenv()
 
 # Get environment variables
 TELEGRAM_TOKEN = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
-POE_COOKIE = "k5wlCXujsfwW8EsggKUMyg%3D%3D"
+POE_COOKIE = "m87UlQ4NDefo_CAwj-9kCQ%3D%3D"
 ALLOWED_USERS = os.getenv("ALLOWED_USERS")
 ALLOWED_CHATS = os.getenv("ALLOWED_CHATS")
 
