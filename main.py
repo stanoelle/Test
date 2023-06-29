@@ -60,7 +60,6 @@ default_model = os.getenv("DEFAULT_MODEL")
 
 # Set the default model
 selected_model = default_model if default_model else "capybara"
-app = Flask(__name__)
 async def start(update: Update, context: CallbackContext) -> None:
     user_id = update.effective_user.id
     chat_id = update.effective_chat.id
@@ -502,11 +501,6 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
     )
 bot = Bot(token=TELEGRAM_TOKEN)
 updater = Updater(bot=bot)
-@app.route('/bot-webhook', methods=['POST'])
-def webhook():
-    update = Update.de_json(request.get_json(force=True), bot)
-    dispatcher.process_update(update)
-    return 'OK'
 if __name__ == "__main__":
     start_handler = CommandHandler("start", start)
     reset_handler = CommandHandler("reset", reset)
@@ -530,10 +524,9 @@ if __name__ == "__main__":
     dispatcher.add_handler(restart_handler)
     dispatcher.add_handler(imagine_handler)
 
-    updater = Updater(token=TELEGRAM_TOKEN)
     updater.start_webhook(listen="0.0.0.0",
                       port=80,
-                      url_path='bot-webhook',
-                      webhook_url = 'https://test-gwr1.onrender.com/bot-webhook')
+                      url_path='/bot-webhook',
+                      webhook_url = 'https://test-gwr1.onrender.com/bot-webhook)
 
-    app.run(port=80)
+    updater.idle()
