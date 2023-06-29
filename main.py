@@ -65,7 +65,7 @@ if poe_headers:
 
 
 
-client = poe.client(POE_COOKIE)
+client = poe.Client(POE_COOKIE)
 
 
 
