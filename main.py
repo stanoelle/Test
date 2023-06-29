@@ -3,7 +3,7 @@ import logging
 import os
 import json
 import telebot
-import Poe
+import poe
 from BingImageCreator import ImageGen
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 
