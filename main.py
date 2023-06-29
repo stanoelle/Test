@@ -355,7 +355,7 @@ if __name__ == "__main__":
     application.add_handler(button_handler)
     application.add_handler(set_cookie_handler)
 
-    updater = Updater(application)
+    updater = Updater(application, update_queue=updater._queue)
     updater.start_webhook(listen="0.0.0.0",
                        port=PORT,
                        url_path="/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4",
