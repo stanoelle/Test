@@ -358,11 +358,11 @@ updater.dispatcher.add_handler(select_handler)
 updater.dispatcher.add_handler(message_handler)
 updater.dispatcher.add_handler(button_handler)
 updater.dispatcher.add_handler(set_cookie_handler)
-pathh = "/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
-updater.start_webhook(listen="0.0.0.0",
-                   port=80
-                   url_path=pathh
-                   update_queue=updater._queue)
-updater.bot.set_webhook("https://test-gwr1.onrender.com/" + TOKEN)
+if __name__ == "__main__":
+    updater.start_webhook(listen="0.0.0.0",
+                       port=int(os.environ["PORT"]),
+                       url_path=f"/{TOKEN}",
+                       update_queue=updater._queue)
+    updater.bot.set_webhook("https://test-gwr1.onrender.com/" + TOKEN)
 
-updater.idle()
+    updater.idle()
