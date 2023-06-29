@@ -499,13 +499,11 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
         chat_id=update.effective_chat.id,
         text=error_message,
     )
+bot = Bot(token=TELEGRAM_TOKEN)
+updater = Updater(bot=bot)
 
 if __name__ == "__main__":
-    bot = Bot(token=TELEGRAM_TOKEN)
-    updater = Updater(bot=bot)
-
     dispatcher = updater.dispatcher
-
     start_handler = CommandHandler("start", start)
     reset_handler = CommandHandler("reset", reset)
     purge_handler = CommandHandler("purge", purge)
