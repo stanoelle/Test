@@ -8,8 +8,9 @@ import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
-from telegram import Bot, Updater
+from telegram import Bot
 from telegram.ext import (
+    Updater,
     Filters,
     MessageHandler,
     CommandHandler,
