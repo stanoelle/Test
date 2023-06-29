@@ -232,7 +232,7 @@ async def button_callback(call):
     except Exception as e:
         await handle_error(update, context, e)
 @bot.message_handler(func=lambda message: True)
-async def process_message(update: Update, context: CallbackContext) -> None:
+async def process_message(message):
     message = update.message
     user_id = message.from_user.id
     chat_id = message.chat.id
