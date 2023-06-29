@@ -528,7 +528,7 @@ if __name__ == "__main__":
     dispatcher.add_handler(restart_handler)
     dispatcher.add_handler(imagine_handler)
 
-    updater.start_webhook(listen="0.0.0.0", port=80, url_path=f"/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    updater.bot.setWebhook("https://test-gwr1.onrender.com/")
+    updater.start_webhook(listen="0.0.0.0", port=80, url_path=f"/bot-webhook")
+    updater.bot.setWebhook("https://test-gwr1.onrender.com/bot-webhook")
 
     updater.idle()
