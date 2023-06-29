@@ -6,6 +6,8 @@ import telebot
 import poe
 from BingImageCreator import ImageGen
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
+import tracemalloc
+tracemalloc.start()
 
 
 # Load environment variables from .env fil
