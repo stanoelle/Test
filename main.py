@@ -357,8 +357,8 @@ if __name__ == "__main__":
     application.add_handler(set_cookie_handler)
     #application.add_handler(summarize_handler)
 
-    application.start_webhook(listen="0.0.0.0",
+    updater.start_webhook(listen="0.0.0.0",
                        port=PORT,
                        url_path="6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    application.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    application.idle()
+    updater.bot.setWebhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
+    updater.idle()
