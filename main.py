@@ -356,7 +356,6 @@ if __name__ == "__main__":
     application.add_handler(button_handler)
     application.add_handler(set_cookie_handler)
     #application.add_handler(summarize_handler)
-    application.add_handler(imagine_handler)
 
     application.start_webhook(listen="0.0.0.0",
                        port=PORT,
