@@ -341,7 +341,7 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
 
 TOKEN = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
 
-updater = Updater(use_context=True)
+updater = Updater(TOKEN)
 
 start_handler = CommandHandler("start", start)
 reset_handler = CommandHandler("reset", reset)
