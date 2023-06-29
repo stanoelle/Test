@@ -7,7 +7,7 @@ import time
 import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
-from telegram import Bot, WebhookHandler, Update
+from telegram import Bot
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from telegram.ext import (
     Updater,
@@ -338,36 +338,31 @@ async def handle_error(update: Update, context: CallbackContext, exception: Exce
         text=error_message,
     )
 
-import asyncio
 
-from telegram.bot import Bot
-from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
+TOKEN = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
 
+updater = Updater(token=TOKEN, use_context=True)
 
-if __name__ == "__main__":
-    token = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
+start_handler = CommandHandler("start", start)
+reset_handler = CommandHandler("reset", reset)
+purge_handler = CommandHandler("purge", purge)
+select_handler = CommandHandler("select", select)
+message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), process_message)
+button_handler = CallbackQueryHandler(button_callback)
+set_cookie_handler = CommandHandler("setcookie", set_cookie)
 
-    bot = Bot(token=token)
+updater.dispatcher.add_handler(start_handler)
+updater.dispatcher.add_handler(reset_handler)
+updater.dispatcher.add_handler(purge_handler)
+updater.dispatcher.add_handler(select_handler)
+updater.dispatcher.add_handler(message_handler)
+updater.dispatcher.add_handler(button_handler)
+updater.dispatcher.add_handler(set_cookie_handler)
 
-    start_handler = CommandHandler("start", start)
-    reset_handler = CommandHandler("reset", reset)
-    purge_handler = CommandHandler("purge", purge)
-    select_handler = CommandHandler("select", select)
-    message_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), process_message)
-    button_handler = CallbackQueryHandler(button_callback)
-    set_cookie_handler = CommandHandler("setcookie", set_cookie)
+updater.start_webhook(listen="0.0.0.0",
+                   port=80
+                   url_path="/" + TOKEN,
+                   update_queue=updater._queue)
+updater.bot.set_webhook("https://test-gwr1.onrender.com/" + TOKEN)
 
-    bot.add_handler(start_handler)
-    bot.add_handler(reset_handler)
-    bot.add_handler(purge_handler)
-    bot.add_handler(select_handler)
-    bot.add_handler(message_handler)
-    bot.add_handler(button_handler)
-    bot.add_handler(set_cookie_handler)
-
-    bot.start_webhook(listen="0.0.0.0",
-                   port=PORT,
-                   url_path="/6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4",
-                   update_queue=bot._queue)
-    bot.set_webhook("https://test-gwr1.onrender.com/" + "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4")
-    bot.idle()
+updater.idle()
