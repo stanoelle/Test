@@ -215,7 +215,7 @@ def select(message):
 
 
 @bot.callback_query_handler(func=lambda call: True)
-async def button_callback(call):
+def button_callback(call):
     try:
         # Get the selected bot/model codename
         selected_bot = next(
@@ -234,7 +234,7 @@ async def button_callback(call):
     except Exception as e:
         await handle_error(update, context, e)
 @bot.message_handler(func=lambda message: True)
-async def process_message(message):
+def process_message(message):
     message = update.message
     user_id = message.from_user.id
     chat_id = message.chat.id
