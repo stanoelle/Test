@@ -527,6 +527,6 @@ if __name__ == "__main__":
     updater.start_webhook(listen="0.0.0.0",
                       port=80,
                       url_path='/bot-webhook',
-                      webhook_url = 'https://test-gwr1.onrender.com/bot-webhook)
+                      webhook_url = 'https://test-gwr1.onrender.com/bot-webhook')
 
     updater.idle()
