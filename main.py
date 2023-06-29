@@ -88,25 +88,6 @@ def handle_start(message):
     user_id = message.from_user.id
 
     chat_id = message.chat.id
-
-
-
-    if str(chat_id) not in ALLOWED_CHATS.split(",") and str(user_id) not in ALLOWED_USERS.split(","):
-
-        # Deny access if the user is not in the allowed users list and the chat is not in the allowed chats list
-
-        bot.send_message(
-
-            chat_id=chat_id,
-
-            text="Sorry, you are not allowed to use this bot. If you are the one who set up this bot, add your Telegram UserID to the \"ALLOWED_USERS\" environment variable in your .env file, or use it in the \"ALLOWED_CHATS\" you specified."
-
-        )
-
-        return
-
-
-
     bot.send_message(
 
         chat_id=chat_id,
