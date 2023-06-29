@@ -7,7 +7,7 @@ import time
 import shutil
 from BingImageCreator import ImageGen
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto, Bot
 from telegram.ext import (
     Updater,
     filters,
@@ -344,7 +344,7 @@ from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 
 
 if __name__ == "__main__":
-    token = "YOUR_TELEGRAM_TOKEN"
+    token = "6031689793:AAH1QUatrJGn_g1anjLl2lLT8nPjNkDmwX4"
 
     bot = Bot(token=token)
 
