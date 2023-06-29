@@ -29,7 +29,7 @@ ALLOWED_CHATS = os.getenv("ALLOWED_CHATS")
 
 # Retrieve the Bing auth_cookie from the environment variables
 auth_cookie = os.getenv("BING_AUTH_COOKIE")
-
+PORT = int(os.environ.get('PORT', '5000'))
 # Check if environment variables are set
 if not TELEGRAM_TOKEN:
     raise ValueError("Telegram bot token not set")
@@ -360,4 +360,8 @@ if __name__ == "__main__":
     #application.add_handler(summarize_handler)
     application.add_handler(imagine_handler)
 
-    application.run_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                       port=PORT,
+                       url_path="YOUR TOKEN HERE")
+    updater.bot.setWebhook("YOUR WEB SERVER LINK HERE" + "YOUR TOKEN HERE")
+    updater.idle()
