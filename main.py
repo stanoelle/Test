@@ -528,7 +528,9 @@ if __name__ == "__main__":
     dispatcher.add_handler(restart_handler)
     dispatcher.add_handler(imagine_handler)
 
-    updater.start_webhook(listen="0.0.0.0", port=80, url_path=f"/bot-webhook")
-    updater.bot.setWebhook("https://test-gwr1.onrender.com/bot-webhook")
+    updater.start_webhook(listen="0.0.0.0",
+                      port=int(PORT),
+                      url_path=TELEGRAM_TOKEN,
+                      webhook_url = 'https://yourherokuappname.herokuapp.com/' + TELEGRAM_TOKEN)
 
     updater.idle()
