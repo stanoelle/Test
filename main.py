@@ -11,8 +11,6 @@ from telebot import types
 from bardapi import Bard
 from BingImageCreator import ImageGen
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
-import tracemalloc
-tracemalloc.start()
 
 
 # Load environment variables from .env fil
