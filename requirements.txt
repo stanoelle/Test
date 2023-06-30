@@ -2,4 +2,5 @@ poe_api>=0.4.6
 python-dotenv
 python-telegram-bot==13.9
 BingImageCreator>=0.4.2
-flask
+git+https://github.com/dsdanielpark/Bard-API.git
+pillow
