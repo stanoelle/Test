@@ -408,29 +408,22 @@ def start_new_session(message):
     bot.reply_to(message, 'Session started. Mode set to ChatGPT.')
 
 # Send mode selection buttons
+# Send mode selection buttons
 def send_mode_selection_buttons(message):
     markup = types.InlineKeyboardMarkup()
     chatgpt_button = types.InlineKeyboardButton('ChatGPT', callback_data='chatgpt')
     bard_button = types.InlineKeyboardButton('Bard', callback_data='bard')
-    markup.row(chatgpt_button, bard_button)
+    markup.add(chatgpt_button, bard_button)
     bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
-
 # Handle button callbacks
 @bot.callback_query_handler(func=lambda call: True) 
 def handle_button_callback(call): 
-    user_id = call.from_user.id
-    session = user_sessions.get(user_id)
-    if session and session['mode'] == 'settings':
-        if call.data == 'chatgpt':
-            session['mode'] = 'chatgpt'
-            bot.send_message(call.message.chat.id, 'Mode set to ChatGPT.')
-        elif call.data == 'bard':
-            session['mode'] = 'bard'
-            bot.send_message(call.message.chat.id, 'Mode set to Bard.')
-        else:
-            bot.send_message(call.message.chat.id, 'Invalid selection. Please select ChatGPT or Bard.')
-
-# Run the Telegram bot
+    if call.data == 'chatgpt':
+        # Set mode to ChatGPT
+        ...
+    elif call.data == 'bard':
+        # Set mode to Bard
+        ...
 
 async def handle_error(message: telebot.types.Message, error: Exception):
     logging.exception("An error occurred: %s", str(error))
