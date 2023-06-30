@@ -408,21 +408,12 @@ def start_new_session(message):
     bot.reply_to(message, 'Session started. Mode set to ChatGPT.')
 
 # Send mode selection buttons
-# Send mode selection buttons
 def send_mode_selection_buttons(message):
-    markup = types.InlineKeyboardMarkup()
-    chatgpt_button = types.InlineKeyboardButton('ChatGPT', callback_data='chatgpt')
-    bard_button = types.InlineKeyboardButton('Bard', callback_data='bard')
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    chatgpt_button = types.KeyboardButton('ChatGPT')
+    bard_button = types.KeyboardButton('Bard')
     markup.add(chatgpt_button, bard_button)
-    
-@bot.callback_query_handler(func=lambda call: True) 
-def handle_button_callback(call): 
-    if call.data == 'chatgpt':
-        # Set mode to ChatGPT
-        ...
-    elif call.data == 'bard':
-        # Set mode to Bard
-        ...
+    bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
 
 async def handle_error(message: telebot.types.Message, error: Exception):
     logging.exception("An error occurred: %s", str(error))
