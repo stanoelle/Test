@@ -270,7 +270,7 @@ def process_message(message):
 
         # Send a "working" message to indicate that the bot is processing the message
         message_obj = bot.send_message(
-            chat_id=message.chat_id, text="Working..."
+            chat_id=chat_id, text="Working..."
         )
 
         # Format the message to include the user's nickname but exclude the bot's mention
@@ -295,18 +295,74 @@ def process_message(message):
         # Count the number of messages in the chat log file (excluding the first line)
         num_messages = sum(1 for line in open(chat_log_file).readlines()[1:] if line.startswith("User") or line.startswith("You answered:"))
 
+
         # Add a random delay before sending the request (Hopefully mitigates possibility of being banned.)
         delay_seconds = random.uniform(0.5, 2.0)
         time.sleep(delay_seconds)
 
         # Check the number of messages in the chat log and send the file contents to the bot
         if num_messages >= max_messages:
+            # Read the contents of the chat log file
             with open(chat_log_file, "r") as file:
-                chat_log = file.read()
-            bot.send_message(chat_id=chat_id, text=chat_log)
+                chat_log_content = file.read()
 
+            # Send the chat log to the selected bot/model and get the response
+            response = client.send_message(
+                selected_model, chat_log_content, with_chat_break=False
+            )
+
+            # Erase the chat log file
+            os.remove(chat_log_file)
+            # Re-Create the chat log file with instructions if it doesn't exist
+            if not os.path.isfile(chat_log_file):
+                with open(chat_log_file, "w") as file:
+                    file.write("As a reminder, these are the last 20 messages:\n")
+        else:
+            # Send the formatted message to the selected bot/model and get the response
+            response = client.send_message(
+                selected_model, formatted_message, with_chat_break=False
+            )
+
+        # Concatenate all the message chunks and send the full message back to the user
+        message_chunks = [chunk["text_new"] for chunk in response]
+        message_text = "".join(message_chunks)
+
+        # Remove .replace("`", "\\`") to enable markup rendering.
+        # Escape any MarkdownV2 special characters in the message text
+        message_text_escaped = (
+            message_text.replace("_", "\\_")
+            .replace("*", "\\*")
+            .replace("[", "\\[")
+            .replace("]", "\\]")
+            .replace("(", "\\(")
+            .replace(")", "\\)")
+            .replace("~", "\\~")
+            .replace(">", "\\>")
+            .replace("#", "\\#")
+            .replace("+", "\\+")
+            .replace("-", "\\-")
+            .replace("=", "\\=")
+            .replace("|", "\\|")
+            .replace("{", "\\{")
+            .replace("}", "\\}")
+            .replace(".", "\\.")
+            .replace("!", "\\!")
+        )
+
+        # Save the bot's reply in the chat log
+        with open(chat_log_file, "a") as file:
+            file.write(f"You answered: {message_text}\n")
+
+        # Edit and replace the "working" message with the response message
+        bot.edit_message_text(
+            chat_id=chat_id,
+            message_id=message_obj.message_id,
+            text=message_text_escaped,
+            parse_mode="MarkdownV2",
+        )
     except Exception as e:
         print(f"Error processing message: {e}")
+
 
 async def handle_error(message: telebot.types.Message, error: Exception):
     logging.exception("An error occurred: %s", str(error))
