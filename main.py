@@ -416,8 +416,8 @@ def send_mode_selection_buttons(message):
     bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
 
 # Handle button callbacks
-@bot.callback_query_handler(func=lambda call: True)
-def handle_button_callback(call):
+@bot.callback_query_handler(func=lambda call: True) 
+def handle_button_callback(call): 
     user_id = call.from_user.id
     session = user_sessions.get(user_id)
     if session and session['mode'] == 'settings':
@@ -428,7 +428,7 @@ def handle_button_callback(call):
             session['mode'] = 'bard'
             bot.send_message(call.message.chat.id, 'Mode set to Bard.')
         else:
-            bot.send_message(call.message.chat.id, 'Invalid mode. Please select ChatGPT or Bard.')
+            bot.send_message(call.message.chat.id, 'Invalid selection. Please select ChatGPT or Bard.')
 
 # Run the Telegram bot
 
