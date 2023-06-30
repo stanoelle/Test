@@ -40,7 +40,6 @@ bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 def send_welcome(message):
     if message.chat.type == 'private':
-        add_user_to_db(message.from_user.id)
         keyboard = types.InlineKeyboardMarkup()
 
         button_group = types.InlineKeyboardButton('Add me to your Group', url='http://t.me/aibardgptbot?startgroup=true')
