@@ -44,7 +44,7 @@ def send_welcome(message):
 
         button_group = types.InlineKeyboardButton('Add me to your Group', url='http://t.me/aibardgptbot?startgroup=true')
         button_updates = types.InlineKeyboardButton('Updates', url='https://t.me/tgbardunofficial')
-        button_support = types.InlineKeyboardButton('Latest Update ❗️', url='https://t.me/tgbardunofficial/14')
+        button_support = types.InlineKeyboardButton('Latest Update ❗️', url='https://t.me/tgbardunofficial/20')
         button_how_to_use = types.InlineKeyboardButton('How to Use Me', callback_data='how_to_use')
 
         keyboard.add(button_group, button_updates)
@@ -61,11 +61,11 @@ def send_welcome(message):
 
 This bot is based on ChatGPT and BardAI, designed to provide accurate and real-time answers to a wide range of topics.
 
+If you are new to the bot please send a direct message to start a session with chat gpt.
+
 Just send me a direct message, and I will answer your queries.
 
-The best part? All our services are completely free of charge! So ask away and explore the possibilities with our AI model.
-
-Use `/gpt {YOUR PROMPT}` to access ChatGPT 3.5. It can help you with complex questions. Send a direct message if you prefer Google Bard AI.
+See "How to Use Me" to get a complete guide on how to use me.
 
 If the bot seems blocked, try sending `/start` again or report bugs [here](https://t.me/bardaisupport).
 ''',
@@ -87,11 +87,10 @@ def handle_how_to_use(call):
         caption='''
 *How to Use Me:*
 
-1. To ask a question in a group chat, start your message with `/ask` followed by your question. For example: `/ask How tall is Mount Everest?`
-
-2. In private, you can send me a direct message and ask your question there (By default, you will get answers from Google Bard AI). Use `/gpt` if you prefer ChatGPT more.
-
-4. Use `/gpt` to access ChatGPT 3.5.
+1. Send a direct message to start a session
+2. Use /purge to clear your conversations
+3. By default Chatgpt is selected. Send /settings to change it to Google Bard
+4. Google Bard can provide real time data.
 ''',
         reply_markup=keyboard,
         parse_mode='Markdown'
