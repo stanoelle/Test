@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import logging
 import os
 import json
+import random
 import telebot
 import poe
 from BingImageCreator import ImageGen
