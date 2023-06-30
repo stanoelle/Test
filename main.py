@@ -4,10 +4,11 @@ import os
 import json
 import random
 import time
+from PIL import Image
 import telebot
 import poe
 from telebot import types
-
+from bardapi import Bard
 from BingImageCreator import ImageGen
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 import tracemalloc
@@ -29,6 +30,9 @@ ALLOWED_USERS = os.getenv('ALLOWED_USERS')
 
 ALLOWED_CHATS = os.getenv('ALLOWED_CHATS')
 
+token = 'XQhF5_DT2aLBsn9ezvV6EtEo8tzz0vqZLWK6CRpvcJUGXc3rlPh2HVYFerCUqf8BlMoHMw.'  # Retrieve Bard API token from environment variable
+
+bard = Bard(token=token)
 
 
 # Retrieve the Bing auth_cookie from the environment variables
@@ -418,7 +422,50 @@ def process_chatgpt_message(message, session):
         print(f"Error processing message: {e}")
 
 def process_bard_message(message, session):
-    print("bard")
+    if message.chat.type == 'private':
+        prompt = message.text
+    else:
+        if message.text.startswith('/ask'):
+            prompt = message.text[5:].strip()
+        else:
+            return
+
+    wait_message = bot.send_message(message.chat.id, "Please wait, generating content...")
+
+    try:
+        response = bard.get_answer(prompt)
+        answer = response['content']
+        image_links = response['links']
+        # Send the final answer
+        bot.reply_to(message, answer)
+
+        # Upload images if available
+        if image_links:
+            num_images_to_upload = min(len(image_links), 5)  # Set the maximum number of images to upload
+            for i in range(num_images_to_upload):
+                image_link = image_links[i]
+                try:
+                    image_response = requests.get(image_link)
+                    if image_response.status_code == 200:
+                        image_bytes = io.BytesIO(image_response.content)
+                        bot.send_photo(message.chat.id, photo=image_bytes)
+                except Exception as e_upload:
+                    logger.error(f"Error while uploading image: {e_upload}")
+
+    except Exception as e:
+        logger.error(f"Error while generating answer: {e}")
+        answer = "Sorry, I couldn't generate an answer. Please try again."
+
+        # Send the error message
+        bot.reply_to(message, answer)
+
+    # Delete the "please wait" message
+    bot.delete_message(chat_id=wait_message.chat.id, message_id=wait_message.message_id)
+@bot.message_handler(commands=['ask'])
+def ask_command_handler(message):
+
+   process_bard_message(message) 
+
 def handle_settings_mode(message, session):
     if message.text == 'ChatGPT':
         session['mode'] = 'chatgpt'
