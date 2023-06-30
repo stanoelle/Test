@@ -35,7 +35,7 @@ bard = Bard(token=token)
 # Retrieve the Bing auth_cookie from the environment variables
 
 
-
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
 @bot.message_handler(commands=['start'])
 
 def send_welcome(message):
