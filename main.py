@@ -93,9 +93,37 @@ def handle_settings(message):
     if user_id in user_sessions:
         session = user_sessions[user_id]
         session['mode'] = 'settings'
-        send_mode_selection_buttons(message)
+        # Send the mode selection buttons
+        markup = types.InlineKeyboardMarkup()
+        chatgpt_button = types.InlineKeyboardButton('ChatGPT', callback_data='chatgpt')
+        bard_button = types.InlineKeyboardButton('Bard', callback_data='bard')
+        markup.add(chatgpt_button, bard_button)
+        bot.send_message(chat_id=user_id, text='Please select a mode:', reply_markup=markup)
     else:
         bot.reply_to(message, 'No active session. Start a conversation first.')
+
+@bot.callback_query_handler(func=lambda call: True)
+def button_callback(call):
+    try:
+        # Get the selected mode
+        selected_mode = call.data
+
+        # Handle the selected mode accordingly
+        if selected_mode == 'chatgpt':
+            # Set the user's mode to ChatGPT
+            user_id = call.from_user.id
+            user_sessions[user_id]['mode'] = 'chatgpt'
+            bot.answer_callback_query(call.id, text='Mode set to ChatGPT.')
+        elif selected_mode == 'bard':
+            # Set the user's mode to Bard
+            user_id = call.from_user.id
+            user_sessions[user_id]['mode'] = 'bard'
+            bot.answer_callback_query(call.id, text='Mode set to Bard.')
+        else:
+            bot.answer_callback_query(call.id, text='Invalid selection.')
+    except Exception as e:
+        print(f"Error processing button callback: {e}")
+
 
 @bot.message_handler(func=lambda message: True)
 def handle_all_messages(message):
