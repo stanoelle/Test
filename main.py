@@ -414,8 +414,7 @@ def send_mode_selection_buttons(message):
     chatgpt_button = types.InlineKeyboardButton('ChatGPT', callback_data='chatgpt')
     bard_button = types.InlineKeyboardButton('Bard', callback_data='bard')
     markup.add(chatgpt_button, bard_button)
-    bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
-# Handle button callbacks
+    
 @bot.callback_query_handler(func=lambda call: True) 
 def handle_button_callback(call): 
     if call.data == 'chatgpt':
