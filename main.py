@@ -3,6 +3,7 @@ import logging
 import os
 import json
 import random
+import time
 import telebot
 import poe
 from BingImageCreator import ImageGen
