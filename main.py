@@ -410,26 +410,26 @@ def start_new_session(message):
 
 # Send mode selection buttons
 def send_mode_selection_buttons(message):
-    markup = types.InlineKeyboardMarkup(row_width=2)
-    chatgpt_button = types.InlineKeyboardButton('ChatGPT', callback_data='chatgpt')
-    bard_button = types.InlineKeyboardButton('Bard', callback_data='bard')
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    chatgpt_button = types.KeyboardButton('ChatGPT')
+    bard_button = types.KeyboardButton('Bard')
     markup.add(chatgpt_button, bard_button)
     bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
 
 # Handle button callbacks
-@bot.callback_query_handler(func=lambda call: True)
-def handle_button_callback(call):
-    user_id = call.from_user.id
+@bot.message_handler(func=lambda message: True)
+def handle_button_callback(message):
+    user_id = message.from_user.id
     session = user_sessions.get(user_id)
     if session and session['mode'] == 'settings':
-        if call.data == 'chatgpt':
+        if message.text == 'ChatGPT':
             session['mode'] = 'chatgpt'
-            bot.send_message(call.message.chat.id, 'Mode set to ChatGPT.')
-        elif call.data == 'bard':
+            bot.send_message(message.chat.id, 'Mode set to ChatGPT.')
+        elif message.text == 'Bard':
             session['mode'] = 'bard'
-            bot.send_message(call.message.chat.id, 'Mode set to Bard.')
+            bot.send_message(message.chat.id, 'Mode set to Bard.')
         else:
-            bot.send_message(call.message.chat.id, 'Invalid mode. Please select ChatGPT or Bard.')
+            bot.send_message(message.chat.id, 'Invalid mode. Please select ChatGPT or Bard.')
 
 # Run the Telegram bot
 
