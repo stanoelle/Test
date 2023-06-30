@@ -89,6 +89,20 @@ default_model = os.getenv("DEFAULT_MODEL")
 
 selected_model = default_model if default_model else "capybara"
 
+@bot.message_handler(commands=['start'])
+
+def handle_start(message):
+
+    user_id = message.from_user.id
+
+    chat_id = message.chat.id
+    bot.send_message(
+
+        chat_id=chat_id,
+
+        text="I'm a Poe.com Telegram Bot. Use /help for a list of commands."
+
+    )
 
 user_sessions = {}
 @bot.message_handler(commands=['settings'])
@@ -142,20 +156,6 @@ def handle_all_messages(message):
             handle_settings_mode(message, session)
     else:
         start_new_session(message)
-@bot.message_handler(commands=['start'])
-
-def handle_start(message):
-
-    user_id = message.from_user.id
-
-    chat_id = message.chat.id
-    bot.send_message(
-
-        chat_id=chat_id,
-
-        text="I'm a Poe.com Telegram Bot. Use /help for a list of commands."
-
-    )
 
 
 @bot.message_handler(commands=["purge"])
