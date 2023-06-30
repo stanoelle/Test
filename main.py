@@ -464,15 +464,7 @@ def ask_command_handler(message):
 
    process_bard_message(message) 
 
-def handle_settings_mode(message, session):
-    if message.text == 'ChatGPT':
-        session['mode'] = 'chatgpt'
-        bot.reply_to(message, 'Mode set to ChatGPT.')
-    elif message.text == 'Bard':
-        session['mode'] = 'bard'
-        bot.reply_to(message, 'Mode set to Bard.')
-    else:
-        bot.reply_to(message, 'Invalid mode. Please select ChatGPT or Bard.')
+
 
 # Start a new session for the user
 def start_new_session(message):
@@ -481,12 +473,6 @@ def start_new_session(message):
     bot.reply_to(message, 'Session started. Mode set to ChatGPT.')
 
 # Send mode selection buttons
-def send_mode_selection_buttons(message):
-    markup = types.ReplyKeyboardMarkup(row_width=2)
-    chatgpt_button = types.KeyboardButton('ChatGPT')
-    bard_button = types.KeyboardButton('Bard')
-    markup.add(chatgpt_button, bard_button)
-    bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
 
 async def handle_error(message: telebot.types.Message, error: Exception):
     logging.exception("An error occurred: %s", str(error))
