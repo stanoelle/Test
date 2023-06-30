@@ -6,6 +6,8 @@ import random
 import time
 import telebot
 import poe
+from telebot import types
+
 from BingImageCreator import ImageGen
 from telebot.types import InlineKeyboardButton, InlineKeyboardMarkup
 import tracemalloc
