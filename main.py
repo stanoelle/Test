@@ -51,7 +51,7 @@ def send_welcome(message):
         keyboard.add(button_support)
         keyboard.add(button_how_to_use)
 
-        photo = open('Google-Introduces-BARD-AI-Chatbot.jpg', 'rb')
+        photo = open('Google-Introduces-BARD-AI-Chatbot (1).jpg', 'rb')
 
         bot.send_photo(
             message.chat.id,
