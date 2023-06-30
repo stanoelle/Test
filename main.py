@@ -84,7 +84,30 @@ default_model = os.getenv("DEFAULT_MODEL")
 selected_model = default_model if default_model else "capybara"
 
 
+user_sessions = {}
+@bot.message_handler(commands=['settings'])
+def handle_settings(message):
+    user_id = message.from_user.id
+    if user_id in user_sessions:
+        session = user_sessions[user_id]
+        session['mode'] = 'settings'
+        send_mode_selection_buttons(message)
+    else:
+        bot.reply_to(message, 'No active session. Start a conversation first.')
 
+@bot.message_handler(func=lambda message: True)
+def handle_all_messages(message):
+    user_id = message.from_user.id
+    if user_id in user_sessions:
+        session = user_sessions[user_id]
+        if session['mode'] == 'chatgpt':
+            process_chatgpt_message(message, session)
+        elif session['mode'] == 'bard':
+            process_bard_message(message, session)
+        elif session['mode'] == 'settings':
+            handle_settings_mode(message, session)
+    else:
+        start_new_session(message)
 @bot.message_handler(commands=['start'])
 
 def handle_start(message):
@@ -236,8 +259,7 @@ def button_callback(call):
         print(f"Error processing button callback")
 chat_log_file = "chat_log.txt"
 max_messages = 20
-@bot.message_handler(func=lambda message: True)
-def process_message(message):
+def process_chatgpt_message(message, session):
     user_id = message.from_user.id
     chat_id = message.chat.id
 
@@ -365,6 +387,31 @@ def process_message(message):
     except Exception as e:
         print(f"Error processing message: {e}")
 
+def process_bard_message(message, session):
+    print("bard")
+
+def handle_settings_mode(message, session):
+    if message.text == 'ChatGPT':
+        session['mode'] = 'chatgpt'
+        bot.reply_to(message, 'Mode set to ChatGPT.')
+    elif message.text == 'Bard':
+        session['mode'] = 'bard'
+        bot.reply_to(message, 'Mode set to Bard.')
+    else:
+        bot.reply_to(message, 'Invalid mode. Please select ChatGPT or Bard.')
+
+# Start a new session for the user
+# Start a new session for the user
+def start_new_session(message):
+    user_id = message.from_user.id
+    user_sessions[user_id] = {'mode': 'chatgpt'}
+    bot.reply_to(message, 'Session started. Mode set to ChatGPT.')
+def send_mode_selection_buttons(message):
+    markup = types.ReplyKeyboardMarkup(row_width=2)
+    chatgpt_button = types.KeyboardButton('ChatGPT')
+    bard_button = types.KeyboardButton('Bard')
+    markup.add(chatgpt_button, bard_button)
+    bot.send_message(message.chat.id, 'Please select a mode:', reply_markup=markup)
 
 async def handle_error(message: telebot.types.Message, error: Exception):
     logging.exception("An error occurred: %s", str(error))
